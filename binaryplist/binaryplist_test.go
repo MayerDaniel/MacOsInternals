@@ -1,4 +1,4 @@
-package main
+package binaryplist
 
 import (
 	"os"
@@ -17,11 +17,23 @@ func TestIsPlist(t *testing.T) {
 	if err != nil {
 		t.Errorf("error importing file from path %s", xmlplistPath)
 	}
-	if isPlist(pl) != true {
+	if !isPlist(pl) {
 		t.Errorf("Incorrectly identified a bplist as non bplist")
 	}
-	if isPlist(npl) != false {
+	if isPlist(npl) {
 		t.Errorf("Incorrectly identified a non bplist as bplist")
 	}
+
+}
+
+func TestParsePlist(t *testing.T) {
+	bplistPath := "/github.com/mayerdaniel/MacOSInternals/test/bin.plist"
+	bp := parsePlist(bplistPath)
+	var flag bool
+	flag = true
+	if bp.SortVersion != 0 {
+		flag = false
+	}
+	//complete
 
 }

@@ -1,18 +1,19 @@
-package main
+package binaryplist
 
 import (
-	"fmt"
+	"encoding/binary"
 	"log"
 	"os"
 )
 
 //BinaryPlist - Binary plist struct
 type BinaryPlist struct {
-	OffsetSize       byte
-	RefSize          byte
-	NumObjects       uint8
-	TopObjectOffset  uint8
-	OffsetTableStart uint8
+	SortVersion      uint8
+	OffsetSize       uint8
+	RefSize          uint8
+	NumObjects       uint64
+	TopObjectOffset  uint64
+	OffsetTableStart uint64
 	ObjectTable      []byte
 	OffsetTable      []byte
 }
@@ -40,7 +41,7 @@ func parsePlist(file string) BinaryPlist {
 		fileStats os.FileInfo
 		err       error
 	)
-	trailer := make([]byte, 32)
+	trailer := make([]byte, 26)
 
 	//open file and grab its stats
 	f, err := os.Open(file)
@@ -61,9 +62,14 @@ func parsePlist(file string) BinaryPlist {
 	//parse the fixed length trailer
 	trailerOffset := fileStats.Size() - 32
 	_, err = f.ReadAt(trailer, trailerOffset)
-	return bp
-}
+	bp.SortVersion = uint8(trailer[5])
+	bp.OffsetSize = uint8(trailer[6])
+	bp.RefSize = uint8(trailer[7])
+	bp.NumObjects = binary.BigEndian.Uint64(trailer[8:15])
+	bp.TopObjectOffset = binary.BigEndian.Uint64(trailer[16:23])
+	bp.OffsetTableStart = binary.BigEndian.Uint64(trailer[24:31])
+	bp.ObjectTable = trailer[bp.TopObjectOffset : bp.OffsetTableStart-1]
+	bp.OffsetTable = trailer[bp.OffsetTableStart : trailerOffset-1]
 
-func main() {
-	fmt.Println("hello world")
+	return bp
 }
