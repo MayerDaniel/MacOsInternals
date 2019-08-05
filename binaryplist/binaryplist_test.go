@@ -6,8 +6,8 @@ import (
 )
 
 func TestIsPlist(t *testing.T) {
-	bplistPath := "/Users/danniboi/Desktop/bin.plist"
-	xmlplistPath := "/Users/danniboi/Desktop/xml.plist"
+	bplistPath := "../test/bin.plist"
+	xmlplistPath := "../test/xml.plist"
 
 	pl, err := os.Open(bplistPath)
 	if err != nil {
@@ -26,14 +26,14 @@ func TestIsPlist(t *testing.T) {
 
 }
 
-func TestParsePlist(t *testing.T) {
-	bplistPath := "/github.com/mayerdaniel/MacOSInternals/test/bin.plist"
-	bp := parsePlist(bplistPath)
-	var flag bool
-	flag = true
-	if bp.SortVersion != 0 {
-		flag = false
-	}
-	//complete
+// func TestNewBinaryPlist(t *testing.T) {
+// bplistPath := "../test/bin.plist"
+// bp := NewBinaryPlist(bplistPath)
+// var flag bool
+// flag = true
+// if bp.SortVersion != 0 {
+// 	flag = false
+// }
+//TODO: complete
 
-}
+// }

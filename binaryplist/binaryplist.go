@@ -32,9 +32,8 @@ func isPlist(file *os.File) bool { //turn in to get header
 	return false
 }
 
-//make get trailer
-
-func parsePlist(file string) BinaryPlist {
+//BinaryPlist - Constructor that takes in a file and returns a BinaryPlist struct
+func NewBinaryPlist(file string) BinaryPlist {
 	//instance vars
 	var (
 		bp        BinaryPlist
